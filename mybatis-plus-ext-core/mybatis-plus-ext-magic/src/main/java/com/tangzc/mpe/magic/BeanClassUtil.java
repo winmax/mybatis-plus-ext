@@ -14,6 +14,9 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.lang.reflect.Modifier.isStatic;
+
+
 public class BeanClassUtil {
 
     /**
@@ -121,6 +124,10 @@ public class BeanClassUtil {
         // 获取当前class的所有fields的name列表
         Set<String> fieldNames = fields.stream().map(Field::getName).collect(Collectors.toSet());
         for (Field field : declaredFields) {
+            // 避免静态成员属性
+            if (isStatic(field.getModifiers())) {
+                continue;
+            }
             // 避免重载属性
             if (fieldNames.contains(field.getName())) {
                 continue;
